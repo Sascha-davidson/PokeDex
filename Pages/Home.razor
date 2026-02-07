@@ -1,0 +1,54 @@
+﻿@page "/"
+@inject PokeApiClient Api
+
+<h1>Pokédex</h1>
+
+@if (_pokemonDetails is null)
+{
+    <p>Loading…</p>
+}
+else
+{
+    <div class="pokemon-grid">
+        @foreach (var p in _pokemonDetails)
+        {
+            <div class="pokemon-card">
+                <img src="@p.ImageUrl" alt="@p.Name" />
+                <h3>@p.Id. @p.Name</h3>
+                <p>Type: @string.Join(", ", p.Types)</p>
+            </div>
+        }
+    </div>
+}
+
+@code {
+    private List<PokemonDetailViewModel>? _pokemonDetails;
+
+    protected override async Task OnInitializedAsync()
+    {
+        // Fetch first 50 Pokémon for demo
+        var list = await Api.GetPokemonListAsync(50, 0);
+
+        _pokemonDetails = new List<PokemonDetailViewModel>();
+
+        foreach (var item in list.Results)
+        {
+            var details = await Api.GetPokemonAsync(item.Name);
+            _pokemonDetails.Add(new PokemonDetailViewModel
+            {
+                Id = details.Id,
+                Name = details.Name,
+                ImageUrl = details.Sprites.Other?.OfficialArtwork.FrontDefault ?? details.Sprites.Front_Default,
+                Types = details.Types.Select(t => t.Type.Name).ToList()
+            });
+        }
+    }
+
+    public class PokemonDetailViewModel
+    {
+        public int Id { get; set; }
+        public string Name { get; set; } = "";
+        public string ImageUrl { get; set; } = "";
+        public List<string> Types { get; set; } = new();
+    }
+}
