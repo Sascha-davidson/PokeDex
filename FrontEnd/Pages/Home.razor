@@ -19,29 +19,53 @@ else
             </div>
         }
     </div>
+
+    <button class="load-more-btn" @onclick="LoadMore" disabled="@_loadingMore">
+        @_loadingMore ? "Loading…" : "Load More"
+    </button>
 }
 
 @code {
-    private List<PokemonDetailViewModel>? _pokemonDetails;
+    private List<PokemonDetailViewModel> _pokemonDetails = new();
+    private int _offset = 0;            // Tracks how many we've loaded
+    private const int _pageSize = 100;  // Load 100 at a time
+    private bool _loadingMore = false;  // Prevent double-click
 
     protected override async Task OnInitializedAsync()
     {
-        // Fetch first 50 Pokémon for demo
-        var list = await Api.GetPokemonListAsync(50, 0);
+        await LoadPokemonBatch();
+    }
 
-        _pokemonDetails = new List<PokemonDetailViewModel>();
+    private async Task LoadMore()
+    {
+        await LoadPokemonBatch();
+    }
 
-        foreach (var item in list.Results)
+    private async Task LoadPokemonBatch()
+    {
+        _loadingMore = true;
+
+        // Fetch next batch
+        var list = await Api.GetPokemonListAsync(_pageSize, _offset);
+
+        // Fetch details concurrently
+        var tasks = list.Results.Select(async item =>
         {
             var details = await Api.GetPokemonAsync(item.Name);
-            _pokemonDetails.Add(new PokemonDetailViewModel
+            return new PokemonDetailViewModel
             {
                 Id = details.Id,
                 Name = details.Name,
                 ImageUrl = details.Sprites.Other?.OfficialArtwork.FrontDefault ?? details.Sprites.Front_Default,
                 Types = details.Types.Select(t => t.Type.Name).ToList()
-            });
-        }
+            };
+        });
+
+        _pokemonDetails.AddRange(await Task.WhenAll(tasks));
+
+        // Update offset for next batch
+        _offset += _pageSize;
+        _loadingMore = false;
     }
 
     public class PokemonDetailViewModel
