@@ -1,0 +1,36 @@
+/* CSS for Home component */
+
+.gradient-text {
+    background: linear-gradient(to bottom right, #e90000, #e9000020);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.pokemon-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 1.5rem;
+}
+
+.pokemon-card {
+    display: flex;
+    flex-direction: column;
+    background-color: #fff;
+    gap: 1rem;
+    padding: 1rem;
+    border-radius: 1.5rem;
+    box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.03);
+}
+
+.card-details{
+    display: flex;  
+    flex-direction: column;
+    gap: .5rem;
+}
+
+img {
+    background-color: #F9FAFB;
+    padding: .5rem;
+    border-radius: 1rem;
+}

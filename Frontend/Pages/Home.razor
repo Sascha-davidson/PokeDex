@@ -1,0 +1,40 @@
+﻿@page "/"
+@inject PokeApiClient Api
+@inject HttpClient Http
+
+<h1>Discover the World of <span class="gradient-text">Pokémon</span></h1>
+<h2>Pokédex</h2>
+
+@if (pokemon is null)
+{
+    <p>Loading…</p>
+}
+else
+{
+    <div class="pokemon-grid">
+        @foreach (var p in pokemon)
+        {
+            <div class="pokemon-card">
+                <img src="@p.ImageUrl" alt="@p.Name" />
+                <div class="card-details">
+                    <h3>@p.Id. @p.Name</h3>
+                    <p>Type: @string.Join(", ", p.Types)</p>
+                </div>
+            </div>
+        }
+    </div>
+}
+
+@code {
+    private List<PokemonDto>? pokemon;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadPokemonBatch();
+    }
+
+    private async Task LoadPokemonBatch()
+    {
+        pokemon = await Http.GetFromJsonAsync<List<PokemonDto>>("api/pokemon");
+    }
+}
