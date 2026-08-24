@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PokeDex.Data", "Data\PokeDe
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PokeDex.PokemonDownloader", "PokemonDownloader\PokeDex.PokemonDownloader.csproj", "{C68AD567-8E9B-A14C-711B-BD72324E895C}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PokeDex.Resources", "Resources\PokeDex.Resources.csproj", "{2D9F6FE4-91E2-37B4-337E-643880FB284C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{C68AD567-8E9B-A14C-711B-BD72324E895C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C68AD567-8E9B-A14C-711B-BD72324E895C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C68AD567-8E9B-A14C-711B-BD72324E895C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2D9F6FE4-91E2-37B4-337E-643880FB284C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2D9F6FE4-91E2-37B4-337E-643880FB284C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2D9F6FE4-91E2-37B4-337E-643880FB284C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2D9F6FE4-91E2-37B4-337E-643880FB284C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
