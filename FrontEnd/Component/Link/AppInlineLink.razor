@@ -1,0 +1,70 @@
+﻿@if (IsExternal)
+{
+    <a href="@Href" 
+       target="@Target?.GetDisplayName()" 
+       rel="@Rel"
+       class="@AppButtonClass" 
+       @attributes="AdditionalAttributes">
+        @ChildContent
+    </a>
+}
+else
+{
+    <NavLink Match="@Match" 
+             href="@Href"
+             target="@Target?.GetDisplayName()"
+             rel="@Rel"
+             class="@AppButtonClass"
+             @attributes="AdditionalAttributes">
+        @ChildContent
+    </NavLink>
+}
+
+@code {
+    [Parameter] 
+    public string Href { get; set; } = "";
+
+    [Parameter] 
+    public RenderFragment? ChildContent { get; set; }
+
+    [Parameter] 
+    public string? Class { get; set; }
+
+    [Parameter] 
+    public NavLinkMatch Match { get; set; } = NavLinkMatch.Prefix;
+
+    [Parameter] 
+    public TextDecoration Decoration { get; set; } = TextDecoration.None;
+
+    [Parameter] 
+    public LinkTarget? Target { get; set; }
+
+    [Parameter(CaptureUnmatchedValues = true)] 
+    public Dictionary<string, object>? AdditionalAttributes { get; set; }
+
+    private string? Rel =>
+        Target == LinkTarget.Blank
+            ? "noopener noreferrer"
+            : null;
+
+    private bool IsExternal => 
+        Href.StartsWith("http://", StringComparison.OrdinalIgnoreCase) ||
+        Href.StartsWith("https://", StringComparison.OrdinalIgnoreCase) ||
+        Href.StartsWith("mailto:", StringComparison.OrdinalIgnoreCase) ||
+        Href.StartsWith("tel:", StringComparison.OrdinalIgnoreCase);
+
+    private string AppButtonClass
+    {
+        get
+        {
+            var classes = new List<string>();
+
+            if (!string.IsNullOrEmpty(Class))
+                classes.Add(Class);
+
+            classes.Add($"{Decoration.GetStyleName()}");
+
+            return string.Join(" ", classes);
+        }
+    }
+}

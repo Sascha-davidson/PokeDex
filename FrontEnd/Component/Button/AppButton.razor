@@ -1,0 +1,67 @@
+﻿<button class="@AppButtonClass" 
+        @onclick="OnClick" 
+        type="@Type.ToString().ToLowerInvariant()"
+        disabled="@(Disabled || Loading)"
+        aria-disabled="@(Disabled || Loading)"
+        aria-label="@AriaLabel">
+    @ChildContent
+</button>
+
+@code {
+    [Parameter]
+    public bool Loading { get; set; }
+
+    [Parameter]
+    public bool Square { get; set; }
+    
+    [Parameter]
+    public string? AriaLabel { get; set; }
+    
+    [Parameter]
+    public bool Disabled { get; set; }
+
+    [Parameter]
+    public string? Class { get; set; }
+
+    [Parameter]
+    public RenderFragment? ChildContent { get; set; }
+    
+    [Parameter]
+    public EventCallback OnClick { get; set; }
+
+    [Parameter] 
+    public ButtonVariant Variant { get; set; } = ButtonVariant.Solid;
+
+    [Parameter] 
+    public ButtonSize Size { get; set; } = ButtonSize.Medium;
+
+    [Parameter]
+    public ButtonRadius Radius { get; set; } = ButtonRadius.Medium;
+
+    [Parameter]
+    public ButtonColor Color { get; set; } = ButtonColor.Default;
+
+    [Parameter]
+    public ButtonType Type { get; set; } = ButtonType.Button;
+
+    private string AppButtonClass
+    {
+        get
+        {
+            var classes = new List<string>();
+
+            if (!string.IsNullOrEmpty(Class))
+                classes.Add(Class);
+            classes.Add($"{Variant.ToString().ToLower()}");
+            classes.Add($"{Size.ToString().ToLower()}");
+            classes.Add($"{Radius.ToString().ToLower()}");
+            classes.Add($"{Color.ToString().ToLower()}");
+            if (Square)
+                classes.Add("square");
+            if (Loading)
+                classes.Add("loading");
+
+            return string.Join(" ", classes);
+        }
+    }
+}

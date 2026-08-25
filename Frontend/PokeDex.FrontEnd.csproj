@@ -9,7 +9,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Backend\PokeDex.Backend.csproj" />
-    <ProjectReference Include="..\Data\PokeDex.Data.csproj" />
+    <ProjectReference Include="..\Lib\PokeDex.Lib.csproj" />
     <ProjectReference Include="..\Resources\PokeDex.Resources.csproj" />
   </ItemGroup>
 

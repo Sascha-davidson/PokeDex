@@ -1,4 +1,4 @@
-﻿namespace PokeDex.FrontEnd.Models;
+﻿namespace PokeDex.Backend.Models;
 
 public class PokemonDto
 {
