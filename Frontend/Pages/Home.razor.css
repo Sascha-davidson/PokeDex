@@ -33,4 +33,7 @@ img {
     background-color: #F9FAFB;
     padding: .5rem;
     border-radius: 1rem;
+    &.fallback {
+        opacity: 0.05;
+    }
 }

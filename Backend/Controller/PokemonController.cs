@@ -19,6 +19,7 @@ namespace PokeDex.Backend.Controller
                     p.Id,
                     p.Name,
                     p.NationalDexNumber,
+                    p.ImageUrl,
                 })
                 .ToListAsync();
 

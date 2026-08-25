@@ -13,6 +13,8 @@ public partial class Pokemon
 
     public byte[]? Image { get; set; }
 
+    public string? ImageUrl { get; set; }
+
     public virtual ICollection<DexEntry> DexEntries { get; set; } = new List<DexEntry>();
 
     public virtual ICollection<PokemonForm> PokemonForms { get; set; } = new List<PokemonForm>();

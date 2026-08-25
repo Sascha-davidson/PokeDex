@@ -13,4 +13,8 @@
     <ProjectReference Include="..\Resources\PokeDex.Resources.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="wwwroot\Image\" />
+  </ItemGroup>
+
 </Project>
