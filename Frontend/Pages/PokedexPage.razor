@@ -1,5 +1,6 @@
-﻿@page "/"
-@inject HttpClient Http
+@page "/PokeDex"
+@using PokeDex.FrontEnd.Services
+@inject PokeApiClient PokeApi
 
 <h1>Discover the World of <span class="gradient-text">Pokémon</span></h1>
 <h2>Pokédex</h2>
@@ -34,6 +35,19 @@ else
 
     private async Task LoadPokemonBatch()
     {
-        pokemon = await Http.GetFromJsonAsync<List<PokemonDto>>("api/pokemon");
+        var list = await PokeApi.GetPokemonListAsync(20, 0);
+
+        var details = await Task.WhenAll(
+            list.Results.Select(item => PokeApi.GetPokemonAsync(item.Name)));
+
+        pokemon = details
+            .Select(d => new PokemonDto
+            {
+                Id = d.Id,
+                Name = d.Name,
+                ImageUrl = d.Sprites.Other?.OfficialArtwork?.FrontDefault ?? d.Sprites.Front_Default ?? string.Empty,
+                Types = d.Types.Select(t => t.Type.Name).ToList()
+            })
+            .ToList();
     }
 }
