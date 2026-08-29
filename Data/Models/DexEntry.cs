@@ -5,17 +5,17 @@ namespace PokeDex.Data.Models;
 
 public partial class DexEntry
 {
-    public int id { get; set; }
+    public int Id { get; set; }
 
-    public int pokemon_id { get; set; }
+    public int PokemonId { get; set; }
 
-    public int pokedex_id { get; set; }
+    public int PokedexId { get; set; }
 
-    public int dex_number { get; set; }
+    public int DexNumber { get; set; }
 
     public virtual ICollection<DexEntryTranslation> DexEntryTranslations { get; set; } = new List<DexEntryTranslation>();
 
-    public virtual Pokedex pokedex { get; set; } = null!;
+    public virtual Pokedex Pokedex { get; set; } = null!;
 
-    public virtual Pokemon pokemon { get; set; } = null!;
+    public virtual Pokemon Pokemon { get; set; } = null!;
 }

@@ -1,17 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
-using PokeDex.Data.Models;
 
-namespace PokeDex.Data;
+namespace PokeDex.Data.Models;
 
-public partial class ApplicationDbContext : DbContext
+public partial class AppDbContext : DbContext
 {
-    public ApplicationDbContext()
-    {
-    }
-
-    public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
+    public AppDbContext(DbContextOptions<AppDbContext> options)
         : base(options)
     {
     }
@@ -29,22 +24,20 @@ public partial class ApplicationDbContext : DbContext
     public virtual DbSet<Pokedex> Pokedices { get; set; }
 
     public virtual DbSet<Pokemon> Pokemons { get; set; }
-    public virtual DbSet<PokemonMaps> PokemonMaps { get; set; }
-    public virtual DbSet<PokemonGame> PokemonGame { get; set; }
-    public virtual DbSet<PokemonRegion> PokemonRegions { get; set; }
-    public virtual DbSet<PokemonGeneration> PokemonGeneration { get; set; }
 
-    public virtual DbSet<PokemonForm> PokemonForm { get; set; }
+    public virtual DbSet<PokemonDroppedItem> PokemonDroppedItems { get; set; }
+
+    public virtual DbSet<PokemonForm> PokemonForms { get; set; }
+
+    public virtual DbSet<PokemonGame> PokemonGames { get; set; }
+
+    public virtual DbSet<PokemonGeneration> PokemonGenerations { get; set; }
+
+    public virtual DbSet<PokemonMap> PokemonMaps { get; set; }
+
+    public virtual DbSet<PokemonRegion> PokemonRegions { get; set; }
 
     public virtual DbSet<PokemonTranslation> PokemonTranslations { get; set; }
-
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-    {
-        if (!optionsBuilder.IsConfigured)
-        {
-            optionsBuilder.UseSqlServer("Name=ConnectionStrings:DefaultConnection");
-        }
-    }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -52,10 +45,15 @@ public partial class ApplicationDbContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PK__Characte__3213E83FA4D4684D");
 
-            entity.Property(e => e.Id).ValueGeneratedNever();
+            entity.Property(e => e.Id)
+                .ValueGeneratedNever()
+                .HasColumnName("id");
+            entity.Property(e => e.Age).HasColumnName("age");
             entity.Property(e => e.Name)
                 .HasMaxLength(100)
-                .IsUnicode(false);
+                .IsUnicode(false)
+                .HasColumnName("name");
+            entity.Property(e => e.RoleId).HasColumnName("role_id");
 
             entity.HasOne(d => d.Role).WithMany(p => p.Characters)
                 .HasForeignKey(d => d.RoleId)
@@ -68,10 +66,13 @@ public partial class ApplicationDbContext : DbContext
 
             entity.HasIndex(e => e.Name, "UQ__Characte__72E12F1B78A78F64").IsUnique();
 
-            entity.Property(e => e.Id).ValueGeneratedNever();
+            entity.Property(e => e.Id)
+                .ValueGeneratedNever()
+                .HasColumnName("id");
             entity.Property(e => e.Name)
                 .HasMaxLength(50)
-                .IsUnicode(false);
+                .IsUnicode(false)
+                .HasColumnName("name");
         });
 
         modelBuilder.Entity<DexEntry>(entity =>
@@ -83,6 +84,11 @@ public partial class ApplicationDbContext : DbContext
             entity.HasIndex(e => new { e.PokedexId, e.DexNumber }, "UQ__DexEntry__546DDD5C06F7D98D").IsUnique();
 
             entity.HasIndex(e => new { e.PokemonId, e.PokedexId }, "UQ__DexEntry__7E092047B40C31C8").IsUnique();
+
+            entity.Property(e => e.Id).HasColumnName("id");
+            entity.Property(e => e.DexNumber).HasColumnName("dex_number");
+            entity.Property(e => e.PokedexId).HasColumnName("pokedex_id");
+            entity.Property(e => e.PokemonId).HasColumnName("pokemon_id");
 
             entity.HasOne(d => d.Pokedex).WithMany(p => p.DexEntries)
                 .HasForeignKey(d => d.PokedexId)
@@ -101,9 +107,12 @@ public partial class ApplicationDbContext : DbContext
 
             entity.ToTable("DexEntryTranslation");
 
+            entity.Property(e => e.Id).HasColumnName("ID");
             entity.Property(e => e.LanguageCode)
                 .HasMaxLength(10)
-                .IsUnicode(false);
+                .IsUnicode(false)
+                .HasColumnName("language_code");
+            entity.Property(e => e.Description).HasColumnName("description");
 
             entity.HasOne(d => d.IdNavigation).WithMany(p => p.DexEntryTranslations)
                 .HasForeignKey(d => d.Id)
@@ -117,8 +126,11 @@ public partial class ApplicationDbContext : DbContext
 
             entity.Property(e => e.Code)
                 .HasMaxLength(10)
-                .IsUnicode(false);
-            entity.Property(e => e.Name).HasMaxLength(50);
+                .IsUnicode(false)
+                .HasColumnName("code");
+            entity.Property(e => e.Name)
+                .HasMaxLength(50)
+                .HasColumnName("name");
         });
 
         modelBuilder.Entity<Pokedex>(entity =>
@@ -127,16 +139,43 @@ public partial class ApplicationDbContext : DbContext
 
             entity.ToTable("Pokedex");
 
-            entity.Property(e => e.Id).ValueGeneratedNever();
+            entity.Property(e => e.Id)
+                .ValueGeneratedNever()
+                .HasColumnName("id");
             entity.Property(e => e.Game)
                 .HasMaxLength(100)
-                .IsUnicode(false);
+                .IsUnicode(false)
+                .HasColumnName("game");
             entity.Property(e => e.Name)
                 .HasMaxLength(100)
-                .IsUnicode(false);
+                .IsUnicode(false)
+                .HasColumnName("name");
             entity.Property(e => e.Region)
                 .HasMaxLength(50)
-                .IsUnicode(false);
+                .IsUnicode(false)
+                .HasColumnName("region");
+        });
+
+        modelBuilder.Entity<Pokemon>(entity =>
+        {
+            entity.Property(e => e.ImageUrl).HasMaxLength(1000);
+        });
+
+        modelBuilder.Entity<PokemonDroppedItem>(entity =>
+        {
+            entity.ToTable("PokemonDroppedItem");
+
+            entity.Property(e => e.ItemName).HasMaxLength(100);
+
+            entity.HasOne(d => d.Game).WithMany(p => p.PokemonDroppedItems)
+                .HasForeignKey(d => d.GameId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_PokemonDroppedItem_Game");
+
+            entity.HasOne(d => d.Map).WithMany(p => p.PokemonDroppedItems)
+                .HasForeignKey(d => d.MapId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_PokemonDroppedItem_Map");
         });
 
         modelBuilder.Entity<PokemonForm>(entity =>
@@ -146,20 +185,6 @@ public partial class ApplicationDbContext : DbContext
             entity.HasIndex(e => e.PokemonId, "IX_PokemonForms_PokemonId");
 
             entity.HasOne(d => d.Pokemon).WithMany(p => p.PokemonForms).HasForeignKey(d => d.PokemonId);
-        });
-
-        modelBuilder.Entity<PokemonTranslation>(entity =>
-        {
-            entity.HasKey(e => new { e.PokemonId, e.LanguageCode });
-
-            entity.ToTable("PokemonTranslation");
-
-            entity.Property(e => e.Name).HasMaxLength(100);
-
-            entity.HasOne(d => d.Pokemon).WithMany(p => p.PokemonTranslations)
-                .HasForeignKey(d => d.PokemonId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_PokemonTranslation_Pokemon");
         });
 
         modelBuilder.Entity<PokemonGame>(entity =>
@@ -191,6 +216,22 @@ public partial class ApplicationDbContext : DbContext
             entity.Property(e => e.Slug).HasMaxLength(50);
         });
 
+        modelBuilder.Entity<PokemonMap>(entity =>
+        {
+            entity.ToTable("PokemonMap");
+
+            entity.HasIndex(e => e.Slug, "UQ_PokemonMap_Slug").IsUnique();
+
+            entity.Property(e => e.Name).HasMaxLength(100);
+            entity.Property(e => e.Slug).HasMaxLength(100);
+            entity.Property(e => e.SvgPath).HasMaxLength(255);
+
+            entity.HasOne(d => d.Region).WithMany(p => p.PokemonMaps)
+                .HasForeignKey(d => d.RegionId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_PokemonMap_Region");
+        });
+
         modelBuilder.Entity<PokemonRegion>(entity =>
         {
             entity.ToTable("PokemonRegions");
@@ -204,6 +245,24 @@ public partial class ApplicationDbContext : DbContext
                 .HasForeignKey(d => d.GenerationId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_PokemonRegion_Generation");
+        });
+
+        modelBuilder.Entity<PokemonTranslation>(entity =>
+        {
+            entity.HasKey(e => new { e.PokemonId, e.LanguageCode });
+
+            entity.ToTable("PokemonTranslation");
+
+            entity.Property(e => e.PokemonId).HasColumnName("pokemon_id");
+            entity.Property(e => e.LanguageCode).HasColumnName("language_code");
+            entity.Property(e => e.Name)
+                .HasMaxLength(100)
+                .HasColumnName("name");
+
+            entity.HasOne(d => d.Pokemon).WithMany(p => p.PokemonTranslations)
+                .HasForeignKey(d => d.PokemonId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_PokemonTranslation_Pokemon");
         });
 
         OnModelCreatingPartial(modelBuilder);

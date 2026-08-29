@@ -5,9 +5,9 @@ namespace PokeDex.Data.Models;
 
 public partial class CharactersRole
 {
-    public int id { get; set; }
+    public int Id { get; set; }
 
-    public string name { get; set; } = null!;
+    public string Name { get; set; } = null!;
 
     public virtual ICollection<Character> Characters { get; set; } = new List<Character>();
 }

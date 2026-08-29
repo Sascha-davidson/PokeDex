@@ -5,13 +5,13 @@ namespace PokeDex.Data.Models;
 
 public partial class Character
 {
-    public int id { get; set; }
+    public int Id { get; set; }
 
-    public string name { get; set; } = null!;
+    public string Name { get; set; } = null!;
 
-    public int? age { get; set; }
+    public int? Age { get; set; }
 
-    public int? role_id { get; set; }
+    public int? RoleId { get; set; }
 
-    public virtual CharactersRole? role { get; set; }
+    public virtual CharactersRole? Role { get; set; }
 }

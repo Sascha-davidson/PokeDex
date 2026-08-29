@@ -5,11 +5,11 @@ namespace PokeDex.Data.Models;
 
 public partial class DexEntryTranslation
 {
-    public int ID { get; set; }
+    public int Id { get; set; }
 
-    public string language_code { get; set; } = null!;
+    public string LanguageCode { get; set; } = null!;
 
-    public string description { get; set; } = null!;
+    public string Description { get; set; } = null!;
 
-    public virtual DexEntry IDNavigation { get; set; } = null!;
+    public virtual DexEntry IdNavigation { get; set; } = null!;
 }

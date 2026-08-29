@@ -1,5 +1,4 @@
 ﻿@page "/"
-@rendermode InteractiveServer
 @inject HttpClient Http
 
 <h1>Discover the World of <span class="gradient-text">Pokémon</span></h1>
@@ -15,7 +14,7 @@ else
         @foreach (var p in pokemon)
         {
             <div class="pokemon-card">
-                <img src="@p.ImageUrl" class="@(fallbackImageIds.Contains(p.Id) ? "fallback" : null)" @onerror="@(() => HandleImageError(p))" alt="@p.Name" />
+                <img src="@p.ImageUrl" height="250" width="250" class="@(fallbackImageIds.Contains(p.Id) ? "fallback" : null)" @onerror="@(() => HandleImageError(p))" alt="@p.Name" />
                 <div class="card-details">
                     <h3>@p.Id. @p.Name</h3>
                     <p>Type: @string.Join(", ", p.Types)</p>
@@ -26,7 +25,7 @@ else
 }
 
 @code {
-    private List<PokemonDto>? pokemon;
+    private List<Pokemon>? pokemon;
     private readonly HashSet<int> fallbackImageIds = new();
 
     protected override async Task OnInitializedAsync()
@@ -36,10 +35,10 @@ else
 
     private async Task LoadPokemonBatch()
     {
-        pokemon = await Http.GetFromJsonAsync<List<PokemonDto>>("api/pokemon");
+        pokemon = await Http.GetFromJsonAsync<List<Pokemon>>("api/pokemon");
     }
 
-    private void HandleImageError(PokemonDto p)
+    private void HandleImageError(Pokemon p)
     {
         p.ImageUrl = "/Image/fallback.png";
         fallbackImageIds.Add(p.Id);

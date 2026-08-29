@@ -5,11 +5,11 @@ namespace PokeDex.Data.Models;
 
 public partial class PokemonTranslation
 {
-    public int pokemon_id { get; set; }
+    public int PokemonId { get; set; }
 
-    public string name { get; set; } = null!;
+    public string Name { get; set; } = null!;
 
-    public int language_code { get; set; }
+    public int LanguageCode { get; set; }
 
-    public virtual Pokemon pokemon { get; set; } = null!;
+    public virtual Pokemon Pokemon { get; set; } = null!;
 }

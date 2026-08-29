@@ -26,7 +26,7 @@ else
 }
 
 @code {
-    private List<PokemonDto>? pokemon;
+    private List<Pokemon>? pokemon;
 
     protected override async Task OnInitializedAsync()
     {
@@ -41,7 +41,7 @@ else
             list.Results.Select(item => PokeApi.GetPokemonAsync(item.Name)));
 
         pokemon = details
-            .Select(d => new PokemonDto
+            .Select(d => new Pokemon
             {
                 Id = d.Id,
                 Name = d.Name,

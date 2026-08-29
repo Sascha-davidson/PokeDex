@@ -1,0 +1,7 @@
+/* CSS for MapLayout component */
+
+.map-container {
+    display: grid;
+    height: 100vh;
+    height: 100svh;
+}

@@ -5,7 +5,7 @@ namespace PokeDex.Data.Models;
 
 public partial class Language
 {
-    public string code { get; set; } = null!;
+    public string Code { get; set; } = null!;
 
-    public string name { get; set; } = null!;
+    public string Name { get; set; } = null!;
 }
